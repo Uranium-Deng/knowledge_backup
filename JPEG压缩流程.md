@@ -30,11 +30,11 @@ V =  0.500R - 0.419G - 0.081B + 128
 
 ​		JPEG图像压缩是基于DCT离散余弦变换实现的，其具体操作实际上就是矩阵乘法，DCT变换中有一个8x8大小的DCT矩阵，记作T，矩阵如下所示：
 
-<img src="/home/dengruizhi/.config/Typora/typora-user-images/image-20210925112601743.png" alt="image-20210925112601743" style="zoom:80%;" />
+<img src="./JPEG_image/DCT系数矩阵.PNG" alt="image-20210925112601743" style="zoom:80%;" />
 
 ​		观察U发现：从上到下，从左到右，cosine()函数的频率越来越大，实数形式的U矩阵和其转置矩阵transpose Array如下：
 
-<img src="/home/dengruizhi/.config/Typora/typora-user-images/image-20210925112852302.png" alt="image-20210925112852302" style="zoom: 67%;" />
+<img src="./JPEG_image/DCT_real_data.PNG" alt="image-20210925112852302" style="zoom: 67%;" />
 
 ​		经过$Y = T*A*T^{'}$计算之后即可得到DCT变化之后的结果，DCT作为傅立叶变换的一种，其作用也是实现空域到频域的转变，将原本空间分布的像素点转变为若干余弦函数的组合，最终得到的DCT变换后的结果（DCT系数矩阵）其本质就是这些consine函数的权重。DCT变换之后低频部分集中在矩阵的左上角、高频部分集中在矩阵的右下角，低频部分的值较大，高频部分的值较小，约等于0。
 
@@ -67,7 +67,7 @@ $$
 
 ​		JPEG中有两张8x8大小的量化表，一张是针对Y通道的、另一张是针对UV色度通道的，量化表的形式如下所示：
 
-<img src="/home/dengruizhi/.config/Typora/typora-user-images/image-20210925114134997.png" alt="image-20210925114134997" style="zoom:67%;" />
+<img src="./JPEG_image/量化表.PNG" alt="image-20210925114134997" style="zoom:67%;" />
 
 ​		**将DCT变换后所得8x8大小的array除以量化表，小数部分四舍五入，就得到量化之后的结果**。由于人眼对亮度相比于色度更敏感，所以**对亮度Y进行细量化，对UV进行粗量化**，因此Y量化表中的值相较于UV量化表就小一些。	
 
@@ -83,13 +83,7 @@ $$
 
 ​		直流DC分量和交流AC分量分别编码之后，再采用Huffman编码进行压缩，这里需要采用4张不同的Huffman表，亮度通道Y和色度通道C各自对应一个Huffman表，然后直流分量和交流分量分别对应一个表。
 
-​		(说实话，这里关于编码这一块，只是知道是这么回事，但是编码具体是怎么做的还是不太会)
-
----
-
-
-
-​		
+​		(说实话，这里关于编码这一块，只是知道是这么回事，但是编码具体是怎么做的还是不太会)		
 
 
 
